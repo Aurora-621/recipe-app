@@ -1,0 +1,14 @@
+{
+  "name": "食遇日记",
+  "short_name": "食遇日记",
+  "description": "记录美食灵感,复刻博主好菜",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#FDF8F0",
+  "theme_color": "#F5A623",
+  "orientation": "portrait",
+  "icons": [
+    { "src": "icon.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icon.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}
