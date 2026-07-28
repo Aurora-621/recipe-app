@@ -97,13 +97,17 @@ function register(username, password, nickname) {
   };
   users[username] = user;
   localStorage.setItem('sy_users', JSON.stringify(users));
+  // 验证写入成功
+  const check = JSON.parse(localStorage.getItem('sy_users') || '{}');
+  if (!check[username]) throw new Error('数据保存失败,请检查浏览器设置');
   return { username: user.username, nickname: user.nickname, avatar_color: user.avatar_color };
 }
 
 function login(username, password) {
   const users = JSON.parse(localStorage.getItem('sy_users') || '{}');
   const user = users[username];
-  if (!user || user.password !== password) throw new Error('用户名或密码错误');
+  if (!user) throw new Error('用户不存在,请先注册');
+  if (user.password !== password) throw new Error('密码错误');
   return { username: user.username, nickname: user.nickname, avatar_color: user.avatar_color };
 }
 
@@ -196,12 +200,17 @@ function bindAuthEvents() {
     try {
       if (mode === 'register') {
         CURRENT_USER = register(username, password, nickname);
+        // 注册成功后直接登录
+        localStorage.setItem('sy_user', JSON.stringify(CURRENT_USER));
+        initDB();
+        toast('注册成功,欢迎使用!');
+        render();
       } else {
         CURRENT_USER = login(username, password);
+        localStorage.setItem('sy_user', JSON.stringify(CURRENT_USER));
+        initDB();
+        render();
       }
-      localStorage.setItem('sy_user', JSON.stringify(CURRENT_USER));
-      initDB();
-      render();
     } catch (e) {
       errEl.textContent = e.message;
       errEl.classList.add('show');
